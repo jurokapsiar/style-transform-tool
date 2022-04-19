@@ -17,8 +17,8 @@
     "@babel/standalone": "^7.17.6",
     "@babel/template": "^7.16.7",
     "@babel/types": "^7.17.0",
-    "@fluentui/react-northstar": "^0.60.1",
-    "@fluentui/react-theme": "^9.0.0-rc.3",
+    "@fluentui/react-northstar": "^0.62.0",
+    "@fluentui/react-theme": "^9.0.0-rc.4",
     "@griffel/core": "^1.0.7",
     "@linaria/shaker": "^3.0.0-beta.15",
     "@nrwl/node": "^13.8.3",
@@ -32,7 +32,8 @@
     "react-simple-code-editor": "^0.11.0",
     "react-use-clipboard": "^1.0.7",
     "regenerator-runtime": "0.13.7",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "v9helper-transform-style-object": "^0.0.3"
   },
   "devDependencies": {
     "@nrwl/cli": "13.8.3",
