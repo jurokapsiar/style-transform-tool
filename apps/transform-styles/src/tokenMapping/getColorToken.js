@@ -24,13 +24,17 @@ export const getV0ColorValues = ({ scheme, token }) => ({
     v0teamsHighContrastTheme.siteVariables.colorScheme[`${scheme}`][`${token}`],
 });
 
-export const getV9ColorValues = ({ scheme, token }) => {
-  const v9Token = v0ToV9({ scheme, token });
+export const getV9ColorValues = ({ token }) => {
   return {
-    light: teamsLightTheme[`${v9Token}`],
-    dark: teamsDarkTheme[`${v9Token}`],
-    contrast: teamsHighContrastTheme[`${v9Token}`],
+    light: teamsLightTheme[`${token}`],
+    dark: teamsDarkTheme[`${token}`],
+    contrast: teamsHighContrastTheme[`${token}`],
   };
+};
+
+export const getV0ToV9ColorValues = ({ scheme, token }) => {
+  const v9Token = v0ToV9({ scheme, token });
+  return getV9ColorValues({ token: v9Token });
 };
 
 export const unifyColor = (color) =>
@@ -43,3 +47,35 @@ export const unifyColor = (color) =>
         .join('')
         .toLowerCase()
     : color.toLowerCase();
+
+export const lookupv9Tokens = (value) => {
+  const candidates = {};
+
+  Object.entries(teamsLightTheme)
+    .filter(entry => (entry[1] === value.light))
+    .map( entry => { 
+      candidates[entry[0]] = 1;
+    });
+
+    Object.entries(teamsDarkTheme)
+    .filter(entry => (entry[1] === value.dark))
+    .map( entry => { 
+      if (candidates[entry[0]]) {
+        candidates[entry[0]]++;
+      } else {
+        candidates[entry[0]] = 1;
+      }
+    });
+
+    Object.entries(teamsHighContrastTheme)
+    .filter(entry => (entry[1] === value.contrast))
+    .map( entry => { 
+      if (candidates[entry[0]]) {
+        candidates[entry[0]]++;
+      } else {
+        candidates[entry[0]] = 1;
+      }
+    });
+
+  return Object.entries(candidates).sort((a, b) => a[1] < b[1]).filter(a => a[1] > 1);
+}

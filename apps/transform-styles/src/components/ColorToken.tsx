@@ -1,10 +1,5 @@
 import * as React from "react";
-
-export interface ColorTokenValue {
-  light: string;
-  dark: string;
-  contrast: string;
-}
+import { ColorTokenValue } from "../tokenMapping/colorTokenCompare";
 
 export interface ColorTokenProps {
   name: string;

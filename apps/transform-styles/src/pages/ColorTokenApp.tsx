@@ -3,16 +3,17 @@ import {
   ColorSchemeDropdown,
   ColorTokenDropdown,
 } from "../components/ColorDropdown";
-import { ColorToken, ColorTokenValue } from "../components/ColorToken";
+import { ColorToken } from "../components/ColorToken";
 import {
   getV0ColorValues,
   v0ToV9,
-  getV9ColorValues,
+  getV0ToV9ColorValues,
   getTokensFromScheme,
-  unifyColor,
 } from "../tokenMapping/getColorToken";
 import { Divider, Header, Checkbox, Button } from "@fluentui/react-northstar";
 import { Link } from "react-router-dom";
+import { isTokenSameColor, numberOfDiffColors } from "../tokenMapping/colorTokenCompare";
+import { ColorTokenDiff } from "../components/ColorTokenDiff";
 
 export const ColorTokenApp = () => {
   const [scheme, setScheme] = React.useState("default");
@@ -21,7 +22,7 @@ export const ColorTokenApp = () => {
   const v0Name = `${scheme}.${token}`;
   const v0Value = getV0ColorValues({ scheme, token });
   const v9Name = v0ToV9({ scheme, token });
-  const v9Value = getV9ColorValues({ scheme, token });
+  const v9Value = getV0ToV9ColorValues({ scheme, token });
 
   return (
     <div style={{ paddingTop: 20 }}>
@@ -68,7 +69,7 @@ export const AllTokens = ({ scheme }: { scheme: string }) => {
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {allTokens.map((token) => {
           const v0Value = getV0ColorValues({ scheme, token });
-          const v9Value = getV9ColorValues({ scheme, token });
+          const v9Value = getV0ToV9ColorValues({ scheme, token });
           if (showDiffOnly && isTokenSameColor(v0Value, v9Value)) {
             return <></>;
           }
@@ -76,6 +77,7 @@ export const AllTokens = ({ scheme }: { scheme: string }) => {
             <div key={token} style={{ display: "flex", gap: 40 }}>
               <ColorToken name={`${scheme}.${token}`} value={v0Value} />
               <ColorToken name={v0ToV9({ scheme, token })} value={v9Value} />
+              <ColorTokenDiff v0value={v0Value} v9value={v9Value} scheme={scheme} token={token}/>
             </div>
           );
         })}
@@ -96,23 +98,5 @@ export const AllTokens = ({ scheme }: { scheme: string }) => {
       />
       {tokens}
     </>
-  );
-};
-
-const isTokenSameColor = (t1: ColorTokenValue, t2: ColorTokenValue) => {
-  const unifiedToken1 = {
-    light: unifyColor(t1.light),
-    dark: unifyColor(t1.dark),
-    contrast: unifyColor(t1.contrast),
-  };
-  const unifiedToken2 = {
-    light: unifyColor(t2.light),
-    dark: unifyColor(t2.dark),
-    contrast: unifyColor(t2.contrast),
-  };
-  return (
-    unifiedToken1.light === unifiedToken2.light &&
-    unifiedToken1.dark === unifiedToken2.dark &&
-    unifiedToken1.contrast === unifiedToken2.contrast
   );
 };
